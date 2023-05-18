@@ -4,8 +4,6 @@ const mysql = require('mysql');
 const cors = require('cors');
 require("dotenv").config();
 
-
-
 // Express / Middleware Setup
 const app = express();
 app.use(bodyParser.json());
