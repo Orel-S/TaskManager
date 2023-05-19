@@ -19,7 +19,7 @@ In the project directory, first run:
 
 To install the required packages, and then
 
-### `node ./server.js`
+### `node .\\server.js`
 
 followed by
 
