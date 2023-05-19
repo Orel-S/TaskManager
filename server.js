@@ -33,15 +33,23 @@ wsServer.on('connection', function (connection) {
   // Handle messages from the client
   connection.on('message', function message(data) {
     const task = JSON.parse(data);
+    console.log({task});
     //Check to make sure there is data
     if (!task) {
       return;
     }
     //Date cleanup for MySQL query
     const date = task.dueDate.substr(0, 10);
-    sqlConnection.query(`INSERT INTO tasks (title, description, dueDate, completed) VALUES('${task.title}', '${task.description}', '${date}', ${task.completed})`, (err, results) => {
-      if (err) throw err;
-    });
+
+    if (task.isNew) {
+      sqlConnection.query(`INSERT INTO tasks (title, description, dueDate, completed) VALUES('${task.title}', '${task.description}', '${date}', ${task.completed})`, (err, results) => {
+        if (err) throw err;
+      });
+    } else {
+      sqlConnection.query(`UPDATE tasks SET completed = ${task.completed === "No" ? 1 : 0} WHERE id = ${task.id}`, (err, results) => {
+        if (err) throw err;
+      });
+    }
 
     //Refresh to update table on clientside
     sqlConnection.query('SELECT * FROM tasks', (err, results) => {

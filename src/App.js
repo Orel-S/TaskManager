@@ -4,10 +4,11 @@ import TaskModal from './components/TaskModal';
 import Button from '@mui/material/Button';
 import NewTask from './components/NewTask';
 import { initConnection, sendMessage } from './api/wsClient';
+import { Container, TextLabel, Frame, Row } from './styles/styles';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [currTask, setCurrTask] = useState({});
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
@@ -35,25 +36,33 @@ function App() {
 
   const handleTaskClick = (task) => {
     setCurrTask(task);
-    console.log("handleTaskClick", { task });
-    setOpen(true);
+    setModalOpen(true);
   };
 
   const handleNewTask = (task) => {
-    console.log("handleNewTask", { task });
-    sendMessage(JSON.stringify(task));
+    const newTask = {...task, isNew: true};
+    sendMessage(JSON.stringify(newTask));
     setIsNewTaskOpen(false);
   };
 
+  const handleTaskComplete = (task) => {
+    const updatedTask = {...task, isNew: false};
+    sendMessage(JSON.stringify(updatedTask));
+    setModalOpen(false);
+  };
+
   return (
-    <div>
+    <Container bgColor='blue'>
+      <Frame height='100%' width='100%' bgColor='#bdc3c7'>
+          <TextLabel bold={true} size={30} color="blue">{!isNewTaskOpen ? "Task List" : "Create New Task"}</TextLabel>
+        </Frame>
       {isNewTaskOpen && <NewTask handleClose={() => setIsNewTaskOpen(false)} handleNewTask={handleNewTask} />}
-      {!isNewTaskOpen && <>
+      {!isNewTaskOpen && <Frame height='80%' width='80%'>
         <TaskList tasks={transformedTasks} columns={transformedColumns} onTaskClick={handleTaskClick} />
-        <Button onClick={() => setIsNewTaskOpen(true)}>Create New Task</Button>
-        <TaskModal open={open} handleClose={() => setOpen(false)} task={currTask.row} />
-      </>}
-    </div>
+        <TaskModal open={modalOpen} handleClose={() => setModalOpen(false)} handleComplete={() => handleTaskComplete(currTask.row)} task={currTask.row} />
+        <Button style={{margin: 10, alignSelf: "start"}} variant="outlined" onClick={() => setIsNewTaskOpen(true)}>Create New Task</Button>
+      </Frame>}
+    </Container>
   );
 }
 

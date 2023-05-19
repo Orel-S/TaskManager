@@ -7,12 +7,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Checkbox from '@mui/material/Checkbox';
 import dayjs from 'dayjs';
+import { Container, TextLabel, Frame, Row } from '../styles/styles';
 
 const label = { inputProps: { 'aria-label': 'Complete' } };
 
 function NewTask(props) {
     //Initialize task to empty task
-    const [task, setTask] = useState({ title: "", description: "", dueDate: null, completed: false });
+    const [task, setTask] = useState({ title: "", description: "", dueDate: dayjs(), completed: false });
     const [error, setError] = useState(null);
 
     const handleNewTask = () => {
@@ -29,21 +30,22 @@ function NewTask(props) {
     }
 
     return (
-        <div>
-            <TextField
+
+        <Frame height='100%' width='100%'>
+            <TextField style={{ margin: 5, width: 250}} 
                 required
                 id="title-textbox"
                 label="Title"
                 defaultValue=""
                 onChange={(e) => setTask({ ...task, title: e.target.value })}
             />
-            <TextField
+            <TextField style={{ margin: 10, width: 250}}
                 id="desc-textbox"
                 label="Description"
                 defaultValue=""
                 onChange={(e) => setTask({ ...task, description: e.target.value })}
             />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} style={{ margin: 10 }}>
                 <DatePicker
                     value={task?.dueDate ?? dayjs()}
                     onChange={(newValue, context) => {
@@ -52,18 +54,23 @@ function NewTask(props) {
                         }
                     }} />
             </LocalizationProvider>
-            <Checkbox {...label}
-                onChange={(e) => setTask({ ...task, completed: e.target.checked })} />
-            <Button onClick={handleNewTask}>
-                Add Task
-            </Button>
-            <Button onClick={props.handleClose}>
-                Cancel
-            </Button>
+            <Row style={{ margin: 5 }}>
+                <TextLabel>Completed</TextLabel>
+                <Checkbox label="Completed" 
+                    onChange={(e) => setTask({ ...task, completed: e.target.checked })} />
+            </Row>
+            <Row>
+                <Button variant="contained" onClick={handleNewTask} style={{ margin: 10 }}>
+                    Add Task
+                </Button>
+                <Button variant="contained" onClick={props.handleClose} style={{ margin: 10 }}>
+                    Cancel
+                </Button>
+            </Row>
             <Typography id="error" style={{ color: 'red' }}>
                 {error}
             </Typography>
-        </div>
+        </Frame>
     );
 }
 
