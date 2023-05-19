@@ -25,22 +25,15 @@ const connection = mysql.createConnection({
   //CRUD Operations
   
   // Fetch all tasks
-app.get('/api/tasks', (req, res) => {
+app.get('/api/get', (req, res) => {
     connection.query('SELECT * FROM tasks', (err, results) => {
       if (err) throw err;
       res.json(results);
     });
   });
-  
-  app.get('/api/columns', (req, res) => {
-    connection.query('SHOW COLUMNS FROM tasks', (err, results) => {
-      if (err) throw err;
-      res.json(results);
-    });
-  });
-  
+
   // Create a new task
-  app.post('/api/tasks', (req, res) => {
+  app.post('/api/create', (req, res) => {
     const { title, description, dueDate } = req.body;
     const task = { title, description, dueDate };
     connection.query('INSERT INTO tasks SET ?', task, (err, result) => {
@@ -50,7 +43,7 @@ app.get('/api/tasks', (req, res) => {
   });
   
   // Mark a task as completed
-  app.patch('/api/tasks/:id', (req, res) => {
+  app.patch('/api/setcomplete/:id', (req, res) => {
     const { id } = req.params;
     connection.query('UPDATE tasks SET completed = true WHERE id = ?', id, (err, result) => {
       if (err) throw err;
