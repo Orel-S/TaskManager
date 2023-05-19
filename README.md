@@ -3,11 +3,11 @@
 ## How To Use
 
 This project requires a MySQL server set up with a table which includes the following columns:
-id: int
-title: varchar(255)
-description: text
-dueDate: date
-completed: tinyint(1)
+id: int\
+title: varchar(255)\
+description: text\
+dueDate: date\
+completed: tinyint(1)\
 
 It also requires a .env file configured with the following variables:
 DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, WS_URL
