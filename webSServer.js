@@ -37,24 +37,18 @@ wsServer.on('connection', function(connection) {
   connection.on('message', function message(data) {
     const d = JSON.parse(data);
     const date = d.dueDate.substr(0,10);
-    console.log(`Received message ${d.title} from user ${sqlConnection.id}`);
+    console.log(`Received message ${d} from user ${sqlConnection.id}`);
+    // this.send(JSON.stringify(d));
     sqlConnection.query(`INSERT INTO tasks (title, description, dueDate, completed) VALUES('${d.title}', '${d.description}', '${date}', ${d.completed})`, (err, results) => {  
         if (err) throw err;
-        console.log(`Sent message ${JSON.stringify(results)} to database`);
+        console.log(`Got response ${JSON.stringify(results)} from database`);
         });
-    });
-    //refresh to update table
-    sqlConnection.query('SELECT * FROM tasks', (err, results) => {
+        // refresh to update table
+      sqlConnection.query('SELECT * FROM tasks', (err, results) => {
       if (err) throw err;
-      connection.send(JSON.stringify(results));
-      // console.log(`Sent message ${JSON.stringify(results)} to user`);
+      this.send(JSON.stringify(results));
+      console.log(`Sent message ${JSON.stringify(results)} to user`);
     });
+  });
+    
 });
-// wsServer.on('message', async function message(data) {
-//     console.log(`Received message ${data} from user ${sqlConnection.id}`);
-//     sqlConnection.query('INSERT INTO tasks (title, description, dueDate, completed) VALUES (?, ?, ?, ?)', [data.title, data.description, data.dueDate, data.completed], (err, results) => {  
-//         if (err) throw err;
-//         console.log(`Sent message ${JSON.stringify(results)} to database`);
-//         });
-//     }
-// );
