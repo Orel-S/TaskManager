@@ -33,7 +33,6 @@ wsServer.on('connection', function (connection) {
   // Handle messages from the client
   connection.on('message', function message(data) {
     const task = JSON.parse(data);
-    console.log({ task });
     //Check to make sure there is data
     if (!task) {
       return;
