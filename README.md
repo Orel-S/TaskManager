@@ -32,7 +32,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 If everything is set up correctly, the app will open on a page listing all of the tasks in your MySQL table.\
 You can click on a given task to view its details in a modal window, wherein the task's completion status can be toggled.\
-Clicking "Create New Task" will take you to a window where you can fill in the details of a new task. Once the new task is created, it is added to the list immediately.\
+Clicking "Create New Task" will take you to a window where you can fill in the details of a new task. Once the new task is created, it is added to the list immediately.
 
 Feel free to contact me if you have any issues with this application.
 
