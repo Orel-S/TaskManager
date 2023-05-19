@@ -32,6 +32,13 @@ app.get('/api/tasks', (req, res) => {
     });
   });
   
+  app.get('/api/columns', (req, res) => {
+    connection.query('SHOW COLUMNS FROM tasks', (err, results) => {
+      if (err) throw err;
+      res.json(results);
+    });
+  });
+  
   // Create a new task
   app.post('/api/tasks', (req, res) => {
     const { title, description, dueDate } = req.body;
@@ -50,8 +57,6 @@ app.get('/api/tasks', (req, res) => {
       res.status(200).json(result);
     });
   });
-  
-  // ... Implement other routes for updating, deleting tasks if needed
 
 
   //Start Server

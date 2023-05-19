@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import TaskList from './components/TaskList';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -17,19 +18,29 @@ function App() {
     }
   };
 
+  const transformedTasks = tasks.map((task) => {
+    return {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      dueDate: task.dueDate,
+      completed: task.completed,
+    };
+  });
+
+  //Fetch columns instead of hardcoding if they may change
+  const transformedColumns = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'title', headerName: 'Title', width: 200 },
+    { field: 'description', headerName: 'Description', width: 300 },
+    { field: 'dueDate', headerName: 'Due Date', width: 150 },
+    { field: 'completed', headerName: 'Completed', width: 120 },
+  ];
+
   return (
+    
     <div>
-      <h1>Task List</h1>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <p>Due Date: {task.dueDate}</p>
-            <p>Completed: {task.completed ? 'Yes' : 'No'}</p>
-          </li>
-        ))}
-      </ul>
+      <TaskList tasks={transformedTasks} columns={transformedColumns} />
     </div>
   );
 }
