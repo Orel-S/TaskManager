@@ -1,29 +1,27 @@
-
 let ws = null;
-export function initConnection(setTasks){
+
+export function initConnection(setTasks) {
     ws = new WebSocket('ws://127.0.0.1:8000');
     ws.onopen = (event) => {
-      console.log('WebSocket connection established.');
+        console.log('WebSocket connection established.');
     };
 
     ws.onmessage = function (event) {
         const json = JSON.parse(event.data);
         try {
-          console.log('received a message from the server', json);
-          
-          if ((json.event = "data")) {
-            setTasks(json);
-            console.log(json.data);
-          }
+            if ((json.event = "data")) {
+                setTasks(json);
+                console.log(json.data);
+            }
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
     }
-  };
-  export function sendMessage(message) {
+};
+
+export function sendMessage(message) {
     console.log('sending message', message);
-    console.log(ws);
     if (ws) {
         ws.send(message);
     }
-  }
+}
