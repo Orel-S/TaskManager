@@ -3,40 +3,38 @@ import axios from 'axios';
 import TaskList from './components/TaskList';
 import TaskModal from './components/TaskModal';
 import Button from '@mui/material/Button';
-import wsClient, { InitClient } from './api/wsClient';
+import NewTask from './components/NewTask'; 
+import { initConnection, sendMessage } from './api/wsClient';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [open, setOpen] = useState(false);
   const [currTask, setCurrTask] = useState({});
-  const ws = new WebSocket('ws://127.0.0.1:8000');
+  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+  // const ws = new WebSocket('ws://127.0.0.1:8000');
 
-  const apiCall = {
-    event: "bts:subscribe",
-    data: { channel: "order_book_btcusd" },
-  };
+  
 
-  ws.onopen = (event) => {
-    ws.send(JSON.stringify(apiCall));
-    console.log("sent a message to the server",{apiCall});
-  };
+  // ws.onopen = (event) => {
+  //   console.log('WebSocket connection established.');
+  // };
 
-  ws.onmessage = function (event) {
-    const json = JSON.parse(event.data);
-    try {
-      console.log('received a message from the server', json);
+  // ws.onmessage = function (event) {
+  //   const json = JSON.parse(event.data);
+  //   try {
+  //     console.log('received a message from the server', json);
       
-      if ((json.event = "data")) {
-        setTasks(json);
-        console.log(json.data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     if ((json.event = "data")) {
+  //       setTasks(json);
+  //       console.log(json.data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   useEffect(() => {
-    // fetchTasks();
+    initConnection(setTasks);
   }, []);
 
   // const fetchTasks = async () => {
@@ -68,7 +66,7 @@ function App() {
   ];
 
   //initialize websocket client
-  wsClient();
+  // wsClient();
 
   const handleTaskClick = (task) => {
     setCurrTask(task);
@@ -76,12 +74,21 @@ function App() {
     setOpen(true);
   };
 
+  const handleNewTask = (task) => {
+    console.log("handleNewTask",{task});
+    sendMessage(JSON.stringify(task));
+    setIsNewTaskOpen(false);
+  };
   return (
     
     <div>
-      <TaskList tasks={transformedTasks} columns={transformedColumns} onTaskClick={handleTaskClick} />
-      <Button onClick={()=>setOpen(true)}>Detailed Task Info</Button>
-      <TaskModal open={open} handleClose={()=> setOpen(false) } task={currTask.row}/>
+      {isNewTaskOpen && <NewTask handleClose={()=>setIsNewTaskOpen(false)} handleNewTask={handleNewTask}/>}
+      {!isNewTaskOpen &&<>
+        <TaskList tasks={transformedTasks} columns={transformedColumns} onTaskClick={handleTaskClick} />
+        <Button onClick={()=>setIsNewTaskOpen(true)}>Create New Task</Button>
+        <TaskModal open={open} handleClose={()=> setOpen(false) } task={currTask.row}/>
+      </>}
+      
       
     </div>
   );

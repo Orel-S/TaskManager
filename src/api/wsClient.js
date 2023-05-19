@@ -1,17 +1,29 @@
-import React from 'react';
-import useWebSocket from 'react-use-websocket';
 
-
-function InitClient() {
-  useWebSocket('ws://127.0.0.1:8000', {
-    onOpen: () => {
+let ws = null;
+export function initConnection(setTasks){
+    ws = new WebSocket('ws://127.0.0.1:8000');
+    ws.onopen = (event) => {
       console.log('WebSocket connection established.');
+    };
+
+    ws.onmessage = function (event) {
+        const json = JSON.parse(event.data);
+        try {
+          console.log('received a message from the server', json);
+          
+          if ((json.event = "data")) {
+            setTasks(json);
+            console.log(json.data);
+          }
+        } catch (err) {
+          console.log(err);
+        }
     }
-  });
-
-  return (
-    <div>Hello WebSockets!</div>
-  );
-}
-
-export default InitClient;
+  };
+  export function sendMessage(message) {
+    console.log('sending message', message);
+    console.log(ws);
+    if (ws) {
+        ws.send(message);
+    }
+  }

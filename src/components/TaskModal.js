@@ -15,22 +15,21 @@ function TaskModal(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div>
-        {/* <label>{props && props.task ? props.task.title:""}</label> */}
+        <Box>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-            {props.task.title}
+            {props?.task?.title ?? ""}
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {props.task.description}
+            {props?.task?.description ?? ""}
         </Typography>
         <Typography id="modal-modal-duedate" sx={{ mt: 2 }}>
-            {props.task.dueDate}
+            {props?.task?.dueDate ?? ""}
         </Typography>
         <Typography id="modal-modal-completed" sx={{ mt: 2 }}>
-            {props.task.completed}
+            {props?.task?.completed ?? ""}
         </Typography>
         <Button onClick={props.handleClose}>Close Modal</Button>
-        </div>
+        </Box>
       </Modal>
       </div>
     );
