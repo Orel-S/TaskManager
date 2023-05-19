@@ -4,7 +4,7 @@ import TaskModal from './components/TaskModal';
 import Button from '@mui/material/Button';
 import NewTask from './components/NewTask';
 import { initConnection, sendMessage } from './api/wsClient';
-import { Container, TextLabel, Frame, Row } from './styles/styles';
+import { Container, TextLabel, Frame } from './styles/styles';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -40,13 +40,13 @@ function App() {
   };
 
   const handleNewTask = (task) => {
-    const newTask = {...task, isNew: true};
+    const newTask = { ...task, isNew: true };
     sendMessage(JSON.stringify(newTask));
     setIsNewTaskOpen(false);
   };
 
   const handleTaskComplete = (task) => {
-    const updatedTask = {...task, isNew: false};
+    const updatedTask = { ...task, isNew: false };
     sendMessage(JSON.stringify(updatedTask));
     setModalOpen(false);
   };
@@ -54,13 +54,13 @@ function App() {
   return (
     <Container bgColor='blue'>
       <Frame height='100%' width='100%' bgColor='#bdc3c7'>
-          <TextLabel bold={true} size={30} color="blue">{!isNewTaskOpen ? "Task List" : "Create New Task"}</TextLabel>
-        </Frame>
+        <TextLabel bold={true} size={30} color="blue">{!isNewTaskOpen ? "Task List" : "Create New Task"}</TextLabel>
+      </Frame>
       {isNewTaskOpen && <NewTask handleClose={() => setIsNewTaskOpen(false)} handleNewTask={handleNewTask} />}
       {!isNewTaskOpen && <Frame height='80%' width='80%'>
         <TaskList tasks={transformedTasks} columns={transformedColumns} onTaskClick={handleTaskClick} />
         <TaskModal open={modalOpen} handleClose={() => setModalOpen(false)} handleComplete={() => handleTaskComplete(currTask.row)} task={currTask.row} />
-        <Button style={{margin: 10, alignSelf: "start"}} variant="outlined" onClick={() => setIsNewTaskOpen(true)}>Create New Task</Button>
+        <Button style={{ margin: 10, alignSelf: "start" }} variant="outlined" onClick={() => setIsNewTaskOpen(true)}>Create New Task</Button>
       </Frame>}
     </Container>
   );

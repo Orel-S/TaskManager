@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { Container, TextLabel, Frame, Row } from '../styles/styles';
+import { Row } from '../styles/styles';
 
 const style = {
   position: 'absolute',
@@ -28,7 +28,7 @@ function TaskModal(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{...style, width: 500, color: "lightcoral"}}>
+        <Box sx={{ ...style, width: 500 }}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Title: {props?.task?.title ?? ""}
           </Typography>
@@ -41,8 +41,10 @@ function TaskModal(props) {
           <Typography id="modal-modal-completed" sx={{ mt: 2 }}>
             Completed: {props?.task?.completed ?? ""}
           </Typography>
-          <Button variant="outlined" onClick={props.handleClose}>Close</Button>
-          <Button variant="outlined" onClick={props.handleComplete}>{props?.task?.completed === "Yes" ? "Mark Incomplete" : "Mark Complete"}</Button>
+          <Row>
+            <Button variant="outlined" style={{ margin: 10 }} onClick={props.handleClose}>Close</Button>
+            <Button variant="outlined" style={{ margin: 10 }} onClick={props.handleComplete}>{props?.task?.completed === "Yes" ? "Mark Incomplete" : "Mark Complete"} </Button>
+          </Row>
         </Box>
       </Modal>
     </div>
